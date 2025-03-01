@@ -56,7 +56,7 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 		MaxAge:   3600 * 24,
 		Secure:   isDev == "",
 		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	http.SetCookie(w, cookie)
