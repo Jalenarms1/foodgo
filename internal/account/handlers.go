@@ -47,13 +47,14 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	fmt.Println(token)
+	isDev := os.Getenv("IS_DEV")
 
 	cookie := &http.Cookie{
 		Name:     "foodgo-auth",
 		Value:    token,
 		Path:     "/",
 		MaxAge:   3600 * 24,
-		Secure:   false,
+		Secure:   isDev == "",
 		HttpOnly: true,
 		SameSite: http.SameSiteLaxMode,
 	}
