@@ -4,6 +4,9 @@ WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
+
+RUN cd client && pnpm run build
+
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/foodgo ./cmd/foodgo
 RUN apk add --no-cache ca-certificates
@@ -12,6 +15,7 @@ FROM scratch
 WORKDIR /root
 
 COPY --from=builder /app/bin .
+COPY --from=builder /app/client /root/client
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
