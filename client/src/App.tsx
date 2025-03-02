@@ -1,9 +1,11 @@
 import { useRef } from 'react'
 import './App.css'
+import { useUser } from './hooks/useUser'
 
 function App() {
   const emailRef = useRef(null)
   const passwordRef = useRef(null)
+  const user = useUser()
 
   const submitForm = async () => {
     const emailRx = /^[\w.%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
@@ -15,7 +17,7 @@ function App() {
     
 
     if (emailRx.test(email)) {
-      const resp = await fetch("https://lalocura-go-production.up.railway.app" + "/user-account", {
+      const resp = await fetch("/api/user-account", {
         method: "POST",
         credentials: 'include',
         headers: {

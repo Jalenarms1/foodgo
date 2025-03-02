@@ -25,9 +25,11 @@ func (s *Server) Run() error {
 
 	logMux := loggingMiddleware(mux)
 
+	userMux := userMiddleware(logMux)
+
 	fmt.Printf("http://localhost%s", s.Addr)
 
-	return http.ListenAndServe(s.Addr, logMux)
+	return http.ListenAndServe(s.Addr, userMux)
 }
 
 func (s *Server) RegisterRoutes(mux *http.ServeMux) {
@@ -36,12 +38,13 @@ func (s *Server) RegisterRoutes(mux *http.ServeMux) {
 
 	mux.Handle("/", fs)
 
-	mux.HandleFunc("POST /user-account", errorHandlerFunc(account.HandleNewAccount))
+	mux.HandleFunc("POST /api/user-account", errorCatchHandlerFunc(account.HandleNewAccount))
+	mux.HandleFunc("GET /api/get-me", errorCatchHandlerFunc(account.HandleGetMe))
 }
 
 type ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
-func errorHandlerFunc(fn ErrorHandlerFunc) http.HandlerFunc {
+func errorCatchHandlerFunc(fn ErrorHandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if err := fn(w, r); err != nil {
 			fmt.Println(err)
