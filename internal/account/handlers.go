@@ -53,7 +53,6 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 		Name:     "foodgo-auth",
 		Value:    token,
 		Path:     "/",
-		Domain:   "lalocura-go-production.up.railway.app",
 		MaxAge:   3600 * 24,
 		Secure:   false,
 		HttpOnly: true,
