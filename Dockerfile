@@ -5,9 +5,10 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
+COPY . .
+
 RUN cd /app/client && pnpm run build
 
-COPY . .
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./bin/foodgo ./cmd/foodgo
 RUN apk add --no-cache ca-certificates
 
