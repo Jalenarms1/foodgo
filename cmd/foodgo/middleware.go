@@ -15,7 +15,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 		fmt.Println(origin)
 
 		if strings.HasSuffix(origin, os.Getenv("CLIENT_DOMAIN")) {
-			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Origin", "foodgo-client.pages.dev")
 			w.Header().Set("Access-Control-Allow-Credentials", "true")
 			w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, POST, GET, PUT, DELETE")
 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")

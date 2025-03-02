@@ -53,7 +53,6 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 		Name:     "foodgo-auth",
 		Value:    token,
 		Path:     "/",
-		Domain:   "foodgo-client.pages.dev",
 		MaxAge:   3600 * 24,
 		Secure:   true,
 		HttpOnly: true,
