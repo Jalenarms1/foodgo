@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -51,7 +52,7 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 
 	cookie := &http.Cookie{
 		Name:     "foodgo-auth",
-		Value:    token,
+		Value:    url.QueryEscape(token),
 		Path:     "/",
 		MaxAge:   3600 * 24,
 		Secure:   true,
