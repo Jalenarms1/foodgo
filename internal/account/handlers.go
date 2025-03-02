@@ -54,7 +54,7 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 		Value:    token,
 		Path:     "/",
 		MaxAge:   3600 * 24,
-		Secure:   false,
+		Secure:   true,
 		HttpOnly: true,
 		SameSite: http.SameSiteNoneMode,
 	}
