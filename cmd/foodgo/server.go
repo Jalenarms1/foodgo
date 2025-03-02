@@ -31,6 +31,11 @@ func (s *Server) Run() error {
 }
 
 func (s *Server) RegisterRoutes(mux *http.ServeMux) {
+
+	fs := http.FileServer(http.Dir("./client/dist"))
+
+	mux.Handle("/", fs)
+
 	mux.HandleFunc("POST /user-account", errorHandlerFunc(account.HandleNewAccount))
 }
 
