@@ -55,9 +55,9 @@ func HandleNewAccount(w http.ResponseWriter, r *http.Request) error {
 		Path:     "/",
 		Domain:   "foodgo-client.pages.dev",
 		MaxAge:   3600 * 24,
-		Secure:   false,
+		Secure:   true,
 		HttpOnly: true,
-		SameSite: http.SameSiteLaxMode,
+		SameSite: http.SameSiteNoneMode,
 	}
 
 	http.SetCookie(w, cookie)
