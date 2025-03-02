@@ -9,8 +9,11 @@ import (
 )
 
 func init() {
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
+	if os.Getenv("IS_DEV") != "" {
+		if err := godotenv.Load(); err != nil {
+			log.Fatal(err)
+		}
+
 	}
 
 }
