@@ -1,10 +1,13 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
-	"github.com/Jalenarms1/foodgo/internal/account"
+	"github.com/Jalenarms1/foodgo/internal/handlers"
+	"github.com/Jalenarms1/foodgo/internal/types"
 )
 
 type Server struct {
@@ -38,17 +41,37 @@ func (s *Server) RegisterRoutes(mux *http.ServeMux) {
 
 	mux.Handle("/", fs)
 
-	mux.HandleFunc("POST /api/user-account", errorCatchHandlerFunc(account.HandleNewAccount))
-	mux.HandleFunc("GET /api/get-me", errorCatchHandlerFunc(account.HandleGetMe))
+	mux.HandleFunc("GET /api/get-me", errorCatchHandlerFunc(handlers.HandleGetMe, false))
+	mux.HandleFunc("POST /api/user-account", errorCatchHandlerFunc(handlers.HandleNewAccount, false))
+	mux.HandleFunc("POST /api/logout", errorCatchHandlerFunc(handlers.HandleLogout, true))
+	mux.HandleFunc("POST /api/login", errorCatchHandlerFunc(handlers.HandleLogin, false))
+
+	mux.HandleFunc("GET /api/food-shop-categories", errorCatchHandlerFunc(handlers.HandlerGetFoodShopCategories, true))
+	mux.HandleFunc("GET /api/food-item-categories", errorCatchHandlerFunc(handlers.HandleGetFoodItemCategories, true))
+	mux.HandleFunc("POST /api/new-food-shop", errorCatchHandlerFunc(handlers.HandleNewFoodShop, true))
+	mux.HandleFunc("POST /api/new-food-item", errorCatchHandlerFunc(handlers.HandlerNewFoodShopItem, true))
+	mux.HandleFunc("POST /api/new-food-schedule", errorCatchHandlerFunc(handlers.HandlerNewFoodShopSchedule, true))
 }
 
 type ErrorHandlerFunc func(w http.ResponseWriter, r *http.Request) error
 
-func errorCatchHandlerFunc(fn ErrorHandlerFunc) http.HandlerFunc {
+func errorCatchHandlerFunc(fn ErrorHandlerFunc, isProtected bool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if isProtected {
+			uid := r.Context().Value(types.AuthKey)
+			if uid == nil {
+				fmt.Println("not authorized to view this route")
+				http.Error(w, errors.New("not authorized to view this route").Error(), http.StatusBadRequest)
+				return
+			}
+
+		}
+
 		if err := fn(w, r); err != nil {
 			fmt.Println(err)
-			http.Error(w, err.Error(), http.StatusBadRequest)
+
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(fmt.Sprintf(`{"error": "%s"}`, err.Error()))
 			return
 		}
 	}

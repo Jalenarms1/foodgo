@@ -5,7 +5,7 @@ import { UserAccount } from "../types"
 export const useUser = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [user, setUser] = useState<UserAccount | null>(null)
-
+    
     const getUser = async () => {
         setIsLoading(true)
         const resp = await fetch("/api/get-me", {
