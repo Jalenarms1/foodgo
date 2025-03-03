@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -11,7 +12,7 @@ import (
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 }
 
